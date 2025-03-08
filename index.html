@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>奇幻桌遊骰子工具</title>
     <style>
         :root {
@@ -21,35 +23,31 @@
             min-height: 100vh;
         }
 
-        /* 下拉选单优化 */
         select {
-            background: rgba(255,255,255,0.9) !important;
-            color: #000 !important;
-            border: 2px solid var(--gold) !important;
+            background: rgba(255,255,255,0.9);
+            color: #000;
+            border: 2px solid var(--gold);
             padding: 8px 15px;
             border-radius: 20px;
         }
 
-        /* 骰子控制行紧凑布局 */
-.dice-row {
-    display: grid;
-    grid-template-columns: 80px repeat(4, 1fr); /* 平均分配四组控制项 */
-    gap: 6px; /* 缩小间隙 */
-    align-items: center;
-    padding: 8px 12px; /* 减少上下内边距 */
-    margin: 5px 0; /* 缩小行间距 */
-    border-left: 4px solid;
-    background: rgba(255,255,255,0.05);
-    border-radius: 6px; /* 调小圆角 */
-
+        .dice-row {
+            display: grid;
+            grid-template-columns: 80px repeat(4, 1fr);
+            gap: 6px;
+            align-items: center;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-left: 4px solid;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
         }
 
-.control-group {
-    display: flex;
-    align-items: center;
-    gap: 4px; /* 缩小标签和输入框的间距 */
-}
-
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
 
         .dice-row label {
             display: flex;
@@ -57,7 +55,6 @@
             gap: 5px;
         }
 
-        /* 输入框尺寸优化 */
         input[type="number"] {
             width: 55px;
             padding: 6px;
@@ -67,7 +64,6 @@
             border-radius: 5px;
         }
 
-        /* 按钮样式统一 */
         button {
             background: linear-gradient(45deg, var(--accent), #ff6b6b);
             border: none;
@@ -79,7 +75,6 @@
             transition: transform 0.2s;
         }
 
-        /* 历史记录样式 */
         .history-item {
             background: rgba(0,0,0,0.3);
             padding: 15px;
@@ -88,7 +83,6 @@
             border-left: 3px solid var(--accent);
         }
 
-        /* 角色管理弹窗 */
         .modal {
             display: none;
             position: fixed;
@@ -103,7 +97,6 @@
             max-width: 400px;
         }
 
-        /* 骰子颜色定义 */
         [data-dice="3"] { border-color: #8ecae6; }
         [data-dice="6"] { border-color: #90be6d; }
         [data-dice="8"] { border-color: #f8961e; }
@@ -111,162 +104,23 @@
         [data-dice="12"] { border-color: #9d4edd; }
         [data-dice="20"] { border-color: #43aa8b; }
         [data-dice="100"] { border-color: #577590; }
+        
+        .option-placeholder {
+            color: #666;
+        }
     </style>
 </head>
 <body>
     <h1>奇幻桌遊骰子工具</h1>
 
-    <!-- 精简后的角色管理区 -->
     <div class="role-management">
         <select id="currentRole">
-            <option value="" style="color: #666">-- 選擇角色 --</option>
+            <option value="" class="option-placeholder">-- 選擇角色 --</option>
         </select>
         <button onclick="toggleRoleManager()">管理角色</button>
     </div>
 
-    <!-- 优化后的骰子控制区 -->
-    <div class="dice-controls">
-        <div class="dice-row" data-dice="3">
-            <label><input type="checkbox"> d3</label>
-            <div class="control-group">
-                <span>數量</span>
-                <input type="number" class="count" value="0" min="0">
-            </div>
-            <div class="control-group">
-                <span>調整</span>
-                <input type="number" class="modifier" value="0">
-            </div>
-            <div class="control-group">
-                <span>去高</span>
-                <input type="number" class="remove-high" value="0" min="0">
-            </div>
-            <div class="control-group">
-                <span>去低</span>
-                <input type="number" class="remove-low" value="0" min="0">
-            </div>
-        </div>
-    <div class="dice-controls">
-        <div class="dice-row" data-dice="6">
-            <label><input type="checkbox"> d6</label>
-            <div class="control-group">
-                <span>數量</span>
-                <input type="number" class="count" value="0" min="0">
-            </div>
-            <div class="control-group">
-                <span>調整</span>
-                <input type="number" class="modifier" value="0">
-            </div>
-            <div class="control-group">
-                <span>去高</span>
-                <input type="number" class="remove-high" value="0" min="0">
-            </div>
-            <div class="control-group">
-                <span>去低</span>
-                <input type="number" class="remove-low" value="0" min="0">
-            </div>
-        </div>
-<div class="dice-controls">
-        <div class="dice-row" data-dice="8">
-            <label><input type="checkbox"> d8</label>
-            <div class="control-group">
-                <span>數量</span>
-                <input type="number" class="count" value="0" min="0">
-            </div>
-            <div class="control-group">
-                <span>調整</span>
-                <input type="number" class="modifier" value="0">
-            </div>
-            <div class="control-group">
-                <span>去高</span>
-                <input type="number" class="remove-high" value="0" min="0">
-            </div>
-            <div class="control-group">
-                <span>去低</span>
-                <input type="number" class="remove-low" value="0" min="0">
-            </div>
-        </div>
-<div class="dice-controls">
-        <div class="dice-row" data-dice="10">
-            <label><input type="checkbox"> d10</label>
-            <div class="control-group">
-                <span>數量</span>
-                <input type="number" class="count" value="0" min="0">
-            </div>
-            <div class="control-group">
-                <span>調整</span>
-                <input type="number" class="modifier" value="0">
-            </div>
-            <div class="control-group">
-                <span>去高</span>
-                <input type="number" class="remove-high" value="0" min="0">
-            </div>
-            <div class="control-group">
-                <span>去低</span>
-                <input type="number" class="remove-low" value="0" min="0">
-            </div>
-        </div>
-<div class="dice-controls">
-        <div class="dice-row" data-dice="12">
-            <label><input type="checkbox"> d12</label>
-            <div class="control-group">
-                <span>數量</span>
-                <input type="number" class="count" value="0" min="0">
-            </div>
-            <div class="control-group">
-                <span>調整</span>
-                <input type="number" class="modifier" value="0">
-            </div>
-            <div class="control-group">
-                <span>去高</span>
-                <input type="number" class="remove-high" value="0" min="0">
-            </div>
-            <div class="control-group">
-                <span>去低</span>
-                <input type="number" class="remove-low" value="0" min="0">
-            </div>
-        </div>
-<div class="dice-controls">
-        <div class="dice-row" data-dice="20">
-            <label><input type="checkbox"> d20</label>
-            <div class="control-group">
-                <span>數量</span>
-                <input type="number" class="count" value="0" min="0">
-            </div>
-            <div class="control-group">
-                <span>調整</span>
-                <input type="number" class="modifier" value="0">
-            </div>
-            <div class="control-group">
-                <span>去高</span>
-                <input type="number" class="remove-high" value="0" min="0">
-            </div>
-            <div class="control-group">
-                <span>去低</span>
-                <input type="number" class="remove-low" value="0" min="0">
-            </div>
-        </div>
-<div class="dice-controls">
-        <div class="dice-row" data-dice="100">
-            <label><input type="checkbox"> d100</label>
-            <div class="control-group">
-                <span>數量</span>
-                <input type="number" class="count" value="0" min="0">
-            </div>
-            <div class="control-group">
-                <span>調整</span>
-                <input type="number" class="modifier" value="0">
-            </div>
-            <div class="control-group">
-                <span>去高</span>
-                <input type="number" class="remove-high" value="0" min="0">
-            </div>
-            <div class="control-group">
-                <span>去低</span>
-                <input type="number" class="remove-low" value="0" min="0">
-            </div>
-        </div>
-
-    </div>
+    <div class="dice-controls" id="diceContainer"></div>
 
     <div class="controls">
         <button onclick="rollAllDice()">擲骰！</button>
@@ -276,7 +130,6 @@
 
     <div id="history"></div>
 
-    <!-- 角色管理弹窗 -->
     <div id="roleModal" class="modal">
         <h3>角色管理</h3>
         <div class="role-input">
@@ -288,7 +141,6 @@
     </div>
 
     <script>
-        // 角色管理功能
         let roles = JSON.parse(localStorage.getItem('diceRoles')) || [];
         let history = JSON.parse(localStorage.getItem('diceHistory')) || [];
 
@@ -328,22 +180,48 @@
 
         function initRoleSelector() {
             const selector = document.getElementById('currentRole');
-            selector.innerHTML = '<option value="" style="color: #666">-- 選擇角色 --</option>';
+            selector.innerHTML = ''; // 清空
+            const placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = '-- 選擇角色 --';
+            placeholder.className = 'option-placeholder';
+            selector.appendChild(placeholder);
+
             roles.forEach(role => {
-                selector.innerHTML += `<option value="${role}">${role}</option>`;
+                const option = document.createElement('option');
+                option.value = role;
+                option.textContent = role;
+                selector.appendChild(option);
             });
         }
 
-        // 骰子功能
+        function createDiceRow(diceType) {
+            return `
+                <div class="dice-row" data-dice="${diceType}">
+                    <label><input type="checkbox"> d${diceType}</label>
+                    ${['數量', '調整', '去高', '去低'].map(label => `
+                        <div class="control-group">
+                            <span>${label}</span>
+                            <input type="number" class="${label === '數量' ? 'count' : label === '調整' ? 'modifier' : label === '去高' ? 'remove-high' : 'remove-low'}" value="0" min="0">
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        const diceTypes = [3, 6, 8, 10, 12, 20, 100];
+        diceTypes.forEach(type => {
+            document.getElementById('diceContainer').innerHTML += createDiceRow(type);
+        });
+
         function rollAllDice() {
             const currentRole = document.getElementById('currentRole').value || '未命名角色';
-            
             let total = 0;
             const results = [];
-            
+
             document.querySelectorAll('.dice-row').forEach(row => {
                 if (!row.querySelector('input[type="checkbox"]').checked) return;
-                
+
                 const diceType = parseInt(row.dataset.dice);
                 const count = Math.max(0, parseInt(row.querySelector('.count').value) || 0);
                 const modifier = parseInt(row.querySelector('.modifier').value) || 0;
@@ -372,7 +250,6 @@
             updateHistory();
         }
 
-        // 清空功能修正
         function clearAllSettings() {
             document.querySelectorAll('input[type="number"]').forEach(input => input.value = 0);
             document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
@@ -411,7 +288,6 @@
             `).join('');
         }
 
-        // 初始化
         initRoleSelector();
         updateHistory();
     </script>
